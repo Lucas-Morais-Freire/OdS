@@ -120,16 +120,22 @@ def printMatrix(m):
         print(M[i][-1],']', sep='')
     print('')
 
-def printTable(m:list[list[Fraction]], z, label='z'):
+def printTable(m:list[list[Fraction]], z, label='z', varSubs=None):
     expr = f'\\begin{{array}}{"{"}c|c|'
     for i in range(len(m[0]) - 1):
         expr += 'c'
     expr += f'|c{"}"} \n & {label}'
     k = 0
     for i in range(len(z[0])):
-        expr += f' & x_{"{"}{i + 1}{"}"}'
+        if varSubs != None:
+            expr += f' & x_{"{"}{varSubs[i]}{"}"}'
+        else:
+            expr += f' & x_{"{"}{i + 1}{"}"}'
         if not z[1][i]:
-            expr += f'\' & x_{"{"}{i + 1}{"}"}\'\''
+            if varSubs != None:
+                expr += f'\' & x_{"{"}{varSubs[i]}{"}"}\'\''
+            else:
+                expr += f'\' & x_{"{"}{i + 1}{"}"}\'\''
             k += 1
     for i in range(len(z[0]) + 1, len(m[0]) - k):
         expr += f' & x_{"{"}{i}{"}"}'
@@ -148,10 +154,10 @@ def printTable(m:list[list[Fraction]], z, label='z'):
     expr += '\\end{array}'
     return formula_as_file(expr)
 
-def makePivot(m, i, j, z, label):
+def makePivot(m, i, j, z, label='z', varSubs=None):
     C = Fraction(1,1)/m[i][j]
     lineOperation(m, i, C)
-    display(printTable(m, z, label))
+    display(printTable(m, z, label, varSubs))
     for k in range(len(m)):
         if k != i:
             C = -m[k][j]
@@ -177,9 +183,3 @@ def putBack(m:list[list[Fraction]], z, r, min=False):
     for i in range(1, len(m2)):
         m2[i][-1] = m[i][-1]
     return m2
-
-# z = [[7, 9], [True, True]]
-# r = [[1, -1, '>=', -2],
-#      [3, 5, '>=', 15],
-#      [5, 4, '>=', 20]]
-# m = makeMatrix(z, r)
