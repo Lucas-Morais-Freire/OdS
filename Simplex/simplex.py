@@ -3,7 +3,7 @@ from IPython.display import Image
 from IPython.display import display
 
 def formula_as_file(formula):
-    return Image(url=r'http://latex.codecogs.com/png.latex?\dpi{150} %s' % formula)
+    return Image(url=r'http://latex.codecogs.com/png.latex?\dpi{150}\color{white} %s' % formula)
 
 def copyMatrix(m):
     m2 = []
